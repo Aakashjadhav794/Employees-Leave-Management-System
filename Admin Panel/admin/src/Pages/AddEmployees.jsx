@@ -90,6 +90,14 @@ const AddEmployee = () => {
 
         {/* Basic Info */}
         <TextField name="fullName" label="Full Name" fullWidth required margin="normal" />
+        <FormControl fullWidth required margin="normal">
+          <InputLabel>Gender</InputLabel>
+          <Select name="gender" label="Gender">
+            <MenuItem value="Male">Male</MenuItem>
+            <MenuItem value="Female">Female</MenuItem>
+            <MenuItem value="Other">Other</MenuItem>
+          </Select>
+        </FormControl>
         <TextField name="email" label="Email" type="email" fullWidth required margin="normal" />
         <TextField name="phone" label="Phone" fullWidth required margin="normal" />
         <TextField name="address" label="Address" fullWidth required margin="normal" />

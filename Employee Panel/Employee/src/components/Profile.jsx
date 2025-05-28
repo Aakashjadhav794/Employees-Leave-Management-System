@@ -220,6 +220,9 @@ const Profile = () => {
           <div className="info">
             <h2>Name: {employee.fullName}</h2>
             <p>
+              <strong>Gender:</strong> {employee.gender}
+            </p>
+            <p>
               <strong>Department:</strong> {employee.department}
             </p>
             <p>

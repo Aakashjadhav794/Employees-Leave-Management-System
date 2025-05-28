@@ -114,6 +114,7 @@ const EmployeesList = () => {
               <TableCell sx={{ fontWeight: "bold" }}>No.</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Photo</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Gender</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Email</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Department</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Designation</TableCell>
@@ -142,6 +143,7 @@ const EmployeesList = () => {
                   )}
                 </TableCell>
                 <TableCell>{employee.fullName}</TableCell>
+                <TableCell>{employee.gender}</TableCell>
                 <TableCell>{employee.email}</TableCell>
                 <TableCell>{employee.department}</TableCell>
                 <TableCell>{employee.designation}</TableCell>

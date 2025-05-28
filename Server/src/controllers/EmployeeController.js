@@ -96,6 +96,7 @@ let loginEmployee = async (req, res) => {
         id: employee._id,
         empimage: employee.empimage,
         fullName: employee.fullName,
+        gender: employee.gender,
         phone: employee.phone,
         address: employee.address,
         joiningDate: employee.joiningDate,

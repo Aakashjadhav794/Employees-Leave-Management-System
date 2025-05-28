@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const EmployeeSchema = new mongoose.Schema({
   fullName: String,
+  gender:{
+    type:String,
+    enum:["Male","Female","Other"]
+  },
   email: String,
   phone: String,
   department: String,

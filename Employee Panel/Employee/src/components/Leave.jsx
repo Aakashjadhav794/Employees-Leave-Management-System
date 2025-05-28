@@ -85,7 +85,7 @@ const Leave = () => {
       component="form"
       onSubmit={handleSubmit}
       sx={{
-        minHeight: "100vh",
+        minHeight: "75vh",
         backgroundColor: "#f5f5f5",
         display: "flex",
         alignItems: "center",
@@ -95,7 +95,7 @@ const Leave = () => {
     >
       <Paper
         elevation={5}
-        sx={{ p: 4, width: "100%", maxWidth: 600, borderRadius: 3 }}
+        sx={{ p: 4, width: "100%", maxWidth: 600, borderRadius: 3, padding: '25px' }}
       >
         <Typography
           variant="h4"
