@@ -21,10 +21,11 @@ const MyAppBar = ({ isAuthenticated, setIsAuthenticated }) => {
   // Items to show after login
   const authNavItems = [
     { label: 'Dashboard', path: "/", icon: <DashboardIcon /> },
-    { label: 'Profile', path: '/profile', icon: <PersonIcon /> },
     { label: 'Project', path: '/project', icon: <WorkIcon /> },
     { label: 'Leave', path: '/leave', icon: <BeachAccessIcon /> },
     { label: 'Leave History', path: '/leavehistory', icon: <HistoryIcon  /> },
+    { label: 'Profile', path: '/profile', icon: <PersonIcon /> },
+
   ];
 
   // Items to show before login
