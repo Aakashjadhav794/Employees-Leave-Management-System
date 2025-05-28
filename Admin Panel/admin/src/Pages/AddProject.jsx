@@ -130,7 +130,7 @@ const AddProject = () => {
 
         <FormControl fullWidth sx={{ mb: 3 }}>
           <InputLabel>Status</InputLabel>
-          <Select name="status" label="Status" required defaultValue="In-Progress">
+          <Select name="status" label="Status" required defaultValue="Pending">
             <MenuItem value="In-Progress">In-Progress</MenuItem>
             <MenuItem value="Completed">Completed</MenuItem>
             <MenuItem value="Pending">Pending</MenuItem>

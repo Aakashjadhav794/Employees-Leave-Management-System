@@ -124,9 +124,9 @@ const Dashboard = () => {
       Completed: "green",
       "In-Progress": "orange",
       "On-Hold": "gray",
-      approved: "green",
-      rejected: "red",
-      pending: "orange",
+      Approved: "green",
+      Rejected: "red",
+      Pending: "orange",
     }[st] || "black");
 
   if (loading)

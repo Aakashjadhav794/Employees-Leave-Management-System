@@ -12,6 +12,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
+import CancelIcon from "@mui/icons-material/Cancel";
 import axios from "axios";
 import {
   BarChart,
@@ -100,11 +101,16 @@ const Dashboard = () => {
           axios.get("http://localhost:5000/api/fetchallprojects"),
           axios.get("http://localhost:5000/api/fetchAllLeaves"),
         ]);
+
+        const leavesData = Array.isArray(leaveRes.data)
+          ? leaveRes.data
+          : leaveRes.data.leaves || [];
+
         setEmployees(empRes.data);
         setEmployeeCount(empRes.data.length);
         setProjects(projRes.data);
         setProjectCount(projRes.data.length);
-        setLeaves(leaveRes.data);
+        setLeaves(leavesData);
       } catch (error) {
         console.error("Failed to fetch data:", error);
       } finally {
@@ -122,14 +128,6 @@ const Dashboard = () => {
     return diffDays <= 30;
   }).length;
 
-  const totalLeavesCount = leaves.length;
-  const approvedLeavesCount = leaves.filter((l) => l.status === "Approved").length;
-  const pendingLeavesCount = leaves.filter((l) => l.status === "Pending").length;
-
-  const completedProjectsCount = projects.filter((p) => p.status === "Completed").length;
-  const activeProjectsCount = projects.filter((p) => p.status === "Active").length;
-  const pendingProjectsCount = projects.filter((p) => p.status === "Pending").length;
-
   const departmentCounts = employees.reduce((acc, emp) => {
     const dept = emp.department || "Unknown";
     acc[dept] = (acc[dept] || 0) + 1;
@@ -140,10 +138,67 @@ const Dashboard = () => {
     value,
   }));
 
+  const completedProjectsCount = projects.filter((p) => p.status === "Completed").length;
+  const activeProjectsCount = projects.filter((p) => p.status === "In-Progress").length;
+  const pendingProjectsCount = projects.filter((p) => p.status === "Pending").length;
+
+  // Consistent case-insensitive leave status count
+  const approvedLeavesCount = leaves.filter((l) => l.leaveStatus === "Approved").length;
+  const pendingLeavesCount = leaves.filter((l) => l.leaveStatus === "Pending").length;
+  const rejectedLeavesCount = leaves.filter((l) => l.leaveStatus === "Rejected").length;
+
   const projectStatusData = [
     { name: "Active", count: activeProjectsCount },
     { name: "Pending", count: pendingProjectsCount },
     { name: "Completed", count: completedProjectsCount },
+  ];
+
+  const leaveCards = [
+    {
+      bg: "linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)",
+      iconColor: "#1976d2",
+      label: "Total Leaves",
+      icon: EventAvailableIcon,
+      count: leaves.length,
+    },
+    {
+      bg: "linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%)",
+      iconColor: "#2e7d32",
+      label: "Approved Leaves",
+      icon: AssignmentTurnedInIcon,
+      count: approvedLeavesCount,
+    },
+    {
+      bg: "linear-gradient(135deg, #fff9c4 0%, #fff59d 100%)",
+      iconColor: "#fbc02d",
+      label: "Pending Leaves",
+      icon: HourglassEmptyIcon,
+      count: pendingLeavesCount,
+    },
+    {
+      bg: "linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%)",
+      iconColor: "#d32f2f",
+      label: "Rejected Leaves",
+      icon: CancelIcon,
+      count: rejectedLeavesCount,
+    },
+  ];
+
+  const employeeCards = [
+    {
+      bg: "linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)",
+      iconColor: "#1976d2",
+      label: "Total Employees",
+      icon: DashboardIcon,
+      count: employeeCount,
+    },
+    {
+      bg: "linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)",
+      iconColor: "#388e3c",
+      label: "New Hires (30 days)",
+      icon: WorkIcon,
+      count: newHiresCount,
+    },
   ];
 
   const projectCards = [
@@ -177,47 +232,6 @@ const Dashboard = () => {
     },
   ];
 
-  const employeeCards = [
-    {
-      bg: "linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)",
-      iconColor: "#1976d2",
-      label: "Total Employees",
-      icon: DashboardIcon,
-      count: employeeCount,
-    },
-    {
-      bg: "linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)",
-      iconColor: "#388e3c",
-      label: "New Hires (30 days)",
-      icon: WorkIcon,
-      count: newHiresCount,
-    },
-  ];
-
-  const leaveCards = [
-    {
-      bg: "linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%)",
-      iconColor: "#d32f2f",
-      label: "Total Leaves",
-      icon: EventAvailableIcon,
-      count: totalLeavesCount,
-    },
-    {
-      bg: "linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%)",
-      iconColor: "#2e7d32",
-      label: "Approved Leaves",
-      icon: AssignmentTurnedInIcon,
-      count: approvedLeavesCount,
-    },
-    {
-      bg: "linear-gradient(135deg, #fff9c4 0%, #fff59d 100%)",
-      iconColor: "#fbc02d",
-      label: "Pending Leaves",
-      icon: HourglassEmptyIcon,
-      count: pendingLeavesCount,
-    },
-  ];
-
   const handleLogout = () => {
     localStorage.removeItem("isAdmin");
     navigate("/");
@@ -233,7 +247,6 @@ const Dashboard = () => {
 
   return (
     <Box sx={{ p: 4, background: "#f5f7fa", minHeight: "100vh" }}>
-      {/* Logout Button */}
       <Box sx={{ position: "fixed", top: 16, right: 16, zIndex: 1000 }}>
         <Button
           variant="contained"
@@ -249,139 +262,82 @@ const Dashboard = () => {
         Admin Dashboard
       </Typography>
 
-      {/* Projects Section */}
-      <Typography
-        variant="h5"
-        sx={{ mb: 2, color: "#1976d2", fontWeight: "bold" }}
-      >
+      <Typography variant="h5" sx={{ mb: 2, color: "#1976d2", fontWeight: "bold" }}>
         Projects
       </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 2,
-          justifyContent: "flex-start",
-          mb: 5,
-        }}
-      >
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, justifyContent: "flex-start", mb: 5 }}>
         {projectCards.map(({ bg, iconColor, label, icon, count }, idx) => (
-          <InfoCard
-            key={idx}
-            bg={bg}
-            iconColor={iconColor}
-            label={label}
-            IconComponent={icon}
-            count={count}
-          />
+          <InfoCard key={idx} bg={bg} iconColor={iconColor} label={label} IconComponent={icon} count={count} />
         ))}
       </Box>
 
-      {/* Employees Section */}
-      <Typography
-        variant="h5"
-        sx={{ mb: 2, color: "#1976d2", fontWeight: "bold" }}
-      >
+      <Typography variant="h5" sx={{ mb: 2, color: "#1976d2", fontWeight: "bold" }}>
         Employees
       </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 2,
-          justifyContent: "flex-start",
-          mb: 5,
-        }}
-      >
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, justifyContent: "flex-start", mb: 5 }}>
         {employeeCards.map(({ bg, iconColor, label, icon, count }, idx) => (
-          <InfoCard
-            key={idx}
-            bg={bg}
-            iconColor={iconColor}
-            label={label}
-            IconComponent={icon}
-            count={count}
-          />
+          <InfoCard key={idx} bg={bg} iconColor={iconColor} label={label} IconComponent={icon} count={count} />
         ))}
       </Box>
 
-      {/* Leaves Section */}
-      <Typography
-        variant="h5"
-        sx={{ mb: 2, color: "#1976d2", fontWeight: "bold" }}
-      >
+      <Typography variant="h5" sx={{ mb: 2, color: "#1976d2", fontWeight: "bold" }}>
         Leaves
       </Typography>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, justifyContent: "flex-start", mb: 5 }}>
+        {leaveCards.map(({ bg, iconColor, label, icon, count }, idx) => (
+          <InfoCard key={idx} bg={bg} iconColor={iconColor} label={label} IconComponent={icon} count={count} />
+        ))}
+      </Box>
+
       <Box
         sx={{
           display: "flex",
           flexWrap: "wrap",
-          gap: 2,
-          justifyContent: "flex-start",
-          mb: 5,
+          gap: 4,
+          justifyContent: "space-between",
         }}
       >
-        {leaveCards.map(({ bg, iconColor, label, icon, count }, idx) => (
-          <InfoCard
-            key={idx}
-            bg={bg}
-            iconColor={iconColor}
-            label={label}
-            IconComponent={icon}
-            count={count}
-          />
-        ))}
-      </Box>
-
-      {/* Charts */}
-      <Card sx={{ p: 2, boxShadow: 3, borderRadius: 3, backgroundColor: "#fff" }}>
-        <Typography variant="h6" mb={2}>
-          Insights Overview
-        </Typography>
-        <Box sx={{ display: "flex", gap: 3, height: 300, flexWrap: "wrap" }}>
-          {/* Project Status Bar Chart */}
-          <Box flex={1} minWidth={280} height={300}>
-            <Typography variant="subtitle1" textAlign="center" mb={1}>
-              Project Status
-            </Typography>
-            <ResponsiveContainer width="100%" height="90%">
-              <BarChart data={projectStatusData}>
-                <XAxis dataKey="name" />
-                <YAxis allowDecimals={false} />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="count" fill="#1976d2" barSize={30} />
-              </BarChart>
-            </ResponsiveContainer>
-          </Box>
-
-          {/* Employees by Department Pie Chart */}
-          <Box flex={1} minWidth={280} height={300}>
-            <Typography variant="subtitle1" textAlign="center" mb={1}>
-              Employees by Department
-            </Typography>
-            <ResponsiveContainer width="100%" height="90%">
-              <PieChart>
-                <Pie
-                  data={employeeDeptData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  fill="#82ca9d"
-                  label
-                >
-                  {employeeDeptData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </Box>
+        <Box sx={{ flex: "1 1 300px", minWidth: 300, maxWidth: 600, background: "#fff", p: 3, borderRadius: 3, boxShadow: 2 }}>
+          <Typography variant="h6" gutterBottom>
+            Employee Distribution by Department
+          </Typography>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={employeeDeptData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={100}
+                fill="#8884d8"
+                label
+              >
+                {employeeDeptData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend verticalAlign="bottom" height={36} />
+            </PieChart>
+          </ResponsiveContainer>
         </Box>
-      </Card>
+
+        <Box sx={{ flex: "1 1 300px", minWidth: 300, maxWidth: 600, background: "#fff", p: 3, borderRadius: 3, boxShadow: 2 }}>
+          <Typography variant="h6" gutterBottom>
+            Project Status Overview
+          </Typography>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={projectStatusData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <XAxis dataKey="name" />
+              <YAxis allowDecimals={false} />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="count" fill="#1976d2" />
+            </BarChart>
+          </ResponsiveContainer>
+        </Box>
+      </Box>
     </Box>
   );
 };

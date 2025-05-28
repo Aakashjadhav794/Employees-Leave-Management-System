@@ -21,9 +21,9 @@ const ProjectSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["In-Progress", "Completed", "On-Hold"],
+    enum: ["In-Progress", "Completed", "Pending"],
     required: [true, "Project status is required"],
-    default: "In-Progress"
+    default: "Pending"
   },
   employeeid: {
     type: mongoose.Schema.Types.ObjectId,

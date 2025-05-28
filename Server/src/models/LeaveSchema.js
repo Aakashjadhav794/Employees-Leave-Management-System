@@ -7,8 +7,8 @@ const LeaveSchema = new mongoose.Schema({
   endDate: Date,
   leaveStatus: {
     type: String,
-    default: "pending",
-    enum: ["pending", "approved", "rejected"]
+    default: "Pending",
+    enum: ["Pending", "Approved", "Rejected"]
   },
   employeeid: {
     type: mongoose.Schema.Types.ObjectId,
