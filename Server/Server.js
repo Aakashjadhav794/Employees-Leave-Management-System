@@ -13,7 +13,14 @@ let Server = express()
 
 Server.use(bodyParser.json())
 
-Server.use(cors());
+Server.use(cors({
+  origin: [
+    "http://localhost:3000",
+    "https://employees-leave-management-system-a2d2-bkigl7pvd.vercel.app"
+  ],
+  credentials: true
+}));
+
 
 Server.use("/Uploadimages",express.static("Uploadimages"))
 //connect to db
