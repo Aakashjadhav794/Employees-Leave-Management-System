@@ -47,7 +47,7 @@ const AddEmployee = () => {
     }
     try {
       const response = await axios.post(
-        "http://https://server-sflm.onrender.com/api/createEmployee",
+        "https://server-sflm.onrender.com/api/createEmployee",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
