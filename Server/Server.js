@@ -16,8 +16,9 @@ Server.use(bodyParser.json())
 Server.use(cors({
   origin: [
     "http://localhost:3000",
-    "https://employees-leave-management-system-a2d2-bkigl7pvd.vercel.app"
+    "https://employees-leave-management-system-a2d2-n7z8axri0.vercel.app"
   ],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true
 }));
 
