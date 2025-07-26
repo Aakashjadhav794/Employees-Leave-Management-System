@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-let DB_URL = "mongodb://127.0.0.1:27017/Employees_Details"
+let DB_URL = "mongodb+srv://aakashjadhavphotographer:<db_password>@cluster0.evqywst.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 async function connectToDatabase()
 {
    try{
